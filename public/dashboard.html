@@ -1,0 +1,43 @@
+<h1>My Tabs</h1>
+
+<input id="url" placeholder="https://example.com">
+<button onclick="addTab()">Add</button>
+
+<ul id="list"></ul>
+
+<script>
+const token = localStorage.getItem("token");
+
+async function load() {
+  const r = await fetch("/api/my-tabs", {
+    headers: { Authorization: token }
+  });
+  const tabs = await r.json();
+
+  list.innerHTML = tabs.map(t =>
+    `<li>${t.url} <button onclick="del(${t.id})">X</button></li>`
+  ).join("");
+}
+
+async function addTab() {
+  await fetch("/api/add-tab", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify({ url: url.value })
+  });
+  load();
+}
+
+async function del(id) {
+  await fetch("/api/tab/" + id, {
+    method: "DELETE",
+    headers: { Authorization: token }
+  });
+  load();
+}
+
+load();
+</script>
