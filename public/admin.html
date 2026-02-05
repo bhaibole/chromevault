@@ -1,0 +1,26 @@
+<h1>👑 Admin Panel</h1>
+
+<button onclick="loadUsers()">Load Users</button>
+<button onclick="loadTabs()">Load Tabs</button>
+
+<pre id="out"></pre>
+
+<script>
+const token = localStorage.getItem("token");
+
+async function loadUsers() {
+  const r = await fetch("/api/admin/users", {
+    headers: { Authorization: token }
+  });
+  document.getElementById("out").textContent =
+    JSON.stringify(await r.json(), null, 2);
+}
+
+async function loadTabs() {
+  const r = await fetch("/api/admin/tabs", {
+    headers: { Authorization: token }
+  });
+  document.getElementById("out").textContent =
+    JSON.stringify(await r.json(), null, 2);
+}
+</script>
